@@ -1,7 +1,7 @@
 FROM python:3-buster
 
 # RUN apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing nut
-RUN apt-get update && apt-get install -y nut
+RUN apt-get update && apt-get install -y nut usbutils
 
 
 WORKDIR /usr/src/app
@@ -20,7 +20,7 @@ ENV UPS_NAME amazonbasics
 
 
 CMD /usr/src/app/scripts/ups-monitor.py \
-	--influx-host $INFLUX_HOST \
-	--influx-port $INFLUX_PORT \
-	--influx-db $INFLUX_DB \
-	--ups-name $UPS_NAME
+	--influx_host $INFLUX_HOST \
+	--influx_port $INFLUX_PORT \
+	--influx_db $INFLUX_DB \
+	--ups_name $UPS_NAME

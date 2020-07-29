@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import time
 import os
@@ -8,17 +8,17 @@ from influxdb import InfluxDBClient
 
 
 parser = argparse.ArgumentParser(description='UPS Influx DB Writer')
-parser.add_argument("--ups-name", help="UPS Name. Name that the NUT driver uses to access the UPS")
-parser.add_argument("--influx-host", help="InfluxDB Host")
-parser.add_argument("--influx-port", help="InfluxDB Port")
-parser.add_argument("--influx-db", help="InfluxDB Database")
+parser.add_argument("--ups_name", help="UPS Name. Name that the NUT driver uses to access the UPS")
+parser.add_argument("--influx_host", help="InfluxDB Host")
+parser.add_argument("--influx_port", help="InfluxDB Port")
+parser.add_argument("--influx_db", help="InfluxDB Database")
 
 args = parser.parse_args()
 
-ups_name = args.ups-name
-influx_host = args.influx-host
-influx_port = args.influx-port
-influx_db = args.influx-db
+ups_name = args.ups_name
+influx_host = args.influx_host
+influx_port = args.influx_port
+influx_db = args.influx_db
 
 
 os.system('mkdir -m 2750 /dev/shm/nut')

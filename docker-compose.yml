@@ -8,5 +8,6 @@ services:
         environment:
             - INFLUX_HOST=influx.xrho.com
             - INFLUX_PORT=8086
-            - INFLUX_DB=ups-generic
+            - INFLUX_DB=ups-server
             - UPS_NAME=amazonbasics
+        privileged: true
