@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+    ups:
+        build: 
+            context: .
+        restart: always
+        environment:
+            - INFLUX_HOST=influx.xrho.com
+            - INFLUX_PORT=8086
+            - INFLUX_DB=ups-generic
+            - UPS_NAME=amazonbasics
