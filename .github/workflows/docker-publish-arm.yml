@@ -52,6 +52,10 @@ jobs:
 
           # Use Docker `latest` tag convention
           [ "$VERSION" == "master" ] && VERSION=latest
+          
+          echo ::set-output name=docker_platform::linux/arm/v7   
+          echo ::set-output name=docker_image::$IMAGE_ID
+          echo ::set-output name=version::${GITHUB_RUN_NUMBER}
 
           echo IMAGE_ID=$IMAGE_ID
           echo VERSION=$VERSION
