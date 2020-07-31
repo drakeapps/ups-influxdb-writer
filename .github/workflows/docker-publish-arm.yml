@@ -35,7 +35,7 @@ jobs:
           version: latest
       
       - name: Build image
-        run: docker buildx . --file Dockerfile.arm32 --tag $IMAGE_NAME --platform=linux/arm/v7
+        run: docker buildx --file Dockerfile.arm32 --tag $IMAGE_NAME --platform=linux/arm/v7 .
 
       - name: Log into registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
