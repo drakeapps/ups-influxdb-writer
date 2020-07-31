@@ -11,3 +11,4 @@ services:
             - INFLUX_DB=ups-server
             - UPS_NAME=amazonbasics
         privileged: true
+    
