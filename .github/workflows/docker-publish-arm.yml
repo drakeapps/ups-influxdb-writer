@@ -29,7 +29,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       
-      - name: Setup build parameters
+      - name: Set up Docker Buildx      
+        uses: crazy-max/ghaction-docker-buildx@v1      
+        with:        
+          version: latest
+      
+      - name: Build & push image
         run: |
           IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME
 
@@ -47,21 +52,12 @@ jobs:
 
           echo IMAGE_ID=$IMAGE_ID
           echo VERSION=$VERSION
-
-      - name: Log into registry
-        run: |
+          
           echo ::set-output name=docker_platform::linux/arm/v7   
           echo ::set-output name=docker_image::$IMAGE_ID
           echo ::set-output name=version::${GITHUB_RUN_NUMBER}
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
 
-      - name: Set up Docker Buildx      
-        uses: crazy-max/ghaction-docker-buildx@v1      
-        with:        
-          version: latest
-      
-      - name: Build & push image
-        run: |
-          docker buildx build --file Dockerfile.arm32 --tag $IMAGE_NAME --platform linux/arm/v7 --tag $IMAGE_ID:$VERSION --output type=image,push=true  .
+          docker buildx build --file Dockerfile.arm32 --tag $IMAGE_NAME --platform linux/arm/v7 --output type=image,push=true  .
 
   
