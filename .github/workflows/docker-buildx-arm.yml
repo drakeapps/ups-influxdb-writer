@@ -19,7 +19,7 @@ jobs:
         name: Prepare
         id: prepare
         run: |
-          DOCKER_IMAGE=drakeapps/ups-influxdb-writer/ups-influxdb-writer_arm32
+          DOCKER_IMAGE=docker.pkg.github.com/drakeapps/ups-influxdb-writer/ups-influxdb-writer_arm32
           DOCKER_PLATFORMS=linux/arm/v7
           VERSION=edge
 
