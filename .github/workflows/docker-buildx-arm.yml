@@ -53,7 +53,7 @@ jobs:
         name: Docker Login
         if: success() && github.event_name != 'pull_request'
         run: |
-		      echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
       -
         name: Docker Buildx (push)
         if: success() && github.event_name != 'pull_request'
