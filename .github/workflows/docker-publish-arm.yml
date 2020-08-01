@@ -53,7 +53,7 @@ jobs:
             --tag "${{ steps.prepare.outputs.docker_image }}:${{ steps.prepare.outputs.version }}" \
             --tag "${{ steps.prepare.outputs.docker_image }}:${{ steps.prepare.outputs.hash }}" \
             --tag "${{ steps.prepare.outputs.docker_image }}:latest" \
-            --file Dockerfile .
+            --file Dockerfile.arm32 .
       - name: Run Buildx (non-master)
         if: success() && !contains(steps.prepare.outputs.version, 'master')
         run: |
