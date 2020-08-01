@@ -29,35 +29,37 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       
-      - name: Set up Docker Buildx      
-        uses: crazy-max/ghaction-docker-buildx@v1      
-        with:        
-          version: latest
-      
-      - name: Build & push image
+      - name: Prepare
+        if: success()
+        id: prepare
         run: |
-          IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME
-
-          # Change all uppercase to lowercase
-          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-
-          # Strip git ref prefix from version
-          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-
-          # Strip "v" prefix from tag name
-          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
-
-          # Use Docker `latest` tag convention
-          [ "$VERSION" == "master" ] && VERSION=latest
-
-          echo IMAGE_ID=$IMAGE_ID
-          echo VERSION=$VERSION
-          
-          echo ::set-output name=docker_platform::linux/arm/v7   
-          echo ::set-output name=docker_image::$IMAGE_ID
-          echo ::set-output name=version::${GITHUB_RUN_NUMBER}
+          echo ::set-output name=docker_platforms::linux/arm/v7
+          echo ::set-output name=docker_username::drakeapps
+          echo ::set-output name=docker_image::docker.pkg.github.com/drakeapps/ups-influxdb-writer-arm32
+          echo ::set-output name=version::${GITHUB_REF#refs/*/}
+          echo ::set-output name=hash::${GITHUB_SHA}
+      - name: Docker Login
+        if: success()
+        env:
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
-
-          docker buildx build --file Dockerfile.arm32 --tag $IMAGE_NAME --platform linux/arm/v7 --output type=image,push=true  .
-
-  
+      - name: Run Buildx (master)
+        if: success() && contains(steps.prepare.outputs.version, 'master')
+        run: |
+          docker buildx build \
+            --output type=image,name=${{ steps.prepare.outputs.docker_image }},push=true \
+            --platform ${{ steps.prepare.outputs.docker_platforms }} \
+            --tag "${{ steps.prepare.outputs.docker_image }}:${{ steps.prepare.outputs.version }}" \
+            --tag "${{ steps.prepare.outputs.docker_image }}:${{ steps.prepare.outputs.hash }}" \
+            --tag "${{ steps.prepare.outputs.docker_image }}:latest" \
+            --file Dockerfile .
+      - name: Run Buildx (non-master)
+        if: success() && !contains(steps.prepare.outputs.version, 'master')
+        run: |
+          docker buildx build \
+            --output type=image,name=${{ steps.prepare.outputs.docker_image }},push=true \
+            --platform ${{ steps.prepare.outputs.docker_platforms }} \
+            --tag "${{ steps.prepare.outputs.docker_image }}:${{ steps.prepare.outputs.version }}" \
+            --tag "${{ steps.prepare.outputs.docker_image }}:${{ steps.prepare.outputs.hash }}" \
+            --file Dockerfile.arm32 .
