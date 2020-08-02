@@ -11,4 +11,16 @@ services:
             - INFLUX_DB=ups-server
             - UPS_NAME=amazonbasics
         privileged: true
+    ups-arm-image:
+        image: drakeapps/ups-influxdb-writer
+        privileged: true
+        restart: always
+        environment:
+            - UDEV=1
+            - INFLUX_HOST=influx.xrho.com
+            - INFLUX_PORT=8086
+            - INFLUX_DB=ups-server
+            - UPS_NAME=amazonbasics
+        devices:
+            - '/dev:/dev'
     
