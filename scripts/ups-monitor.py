@@ -40,7 +40,7 @@ os.system('mkdir -m 2750 /dev/shm/nut')
 # time.sleep(10)
 
 while 1:
-    client = PyNUTClient(host='ups')
+    client = PyNUTClient()
 
     fields = {}
     for var in client.list_vars(ups_name):
