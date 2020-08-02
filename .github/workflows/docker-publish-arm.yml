@@ -35,7 +35,7 @@ jobs:
         run: |
           echo ::set-output name=docker_platforms::linux/arm/v7
           echo ::set-output name=docker_username::drakeapps
-          echo ::set-output name=docker_image::docker.pkg.github.com/drakeapps/ups-influxdb-writer/ups-influxdb-writer_arm32
+          echo ::set-output name=docker_image::docker.io/drakeapps/ups-influxdb-writer
           echo ::set-output name=version::${GITHUB_REF#refs/*/}
           echo ::set-output name=hash::${GITHUB_SHA}
       - name: Set up buildx
@@ -45,7 +45,7 @@ jobs:
         env:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login docker.io -u ${{ github.actor }} --password-stdin
       - name: Run Buildx (master)
         if: success() && contains(steps.prepare.outputs.version, 'master')
         run: |
