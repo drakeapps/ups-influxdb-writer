@@ -35,7 +35,7 @@ jobs:
         run: |
           echo ::set-output name=docker_platforms::linux/arm/v7
           echo ::set-output name=docker_username::drakeapps
-          echo ::set-output name=docker_image::docker.pkg.github.com/drakeapps/ups-influxdb-writer/ups-influxdb-writer-arm32
+          echo ::set-output name=docker_image::docker.pkg.github.com/drakeapps/ups-influxdb-writer
           echo ::set-output name=version::${GITHUB_REF#refs/*/}
           echo ::set-output name=hash::${GITHUB_SHA}
       - name: Set up buildx
@@ -55,13 +55,4 @@ jobs:
             --tag "${{ steps.prepare.outputs.docker_image }}:${{ steps.prepare.outputs.version }}" \
             --tag "${{ steps.prepare.outputs.docker_image }}:${{ steps.prepare.outputs.hash }}" \
             --tag "${{ steps.prepare.outputs.docker_image }}:latest" \
-            --file Dockerfile.arm32 .
-      - name: Run Buildx (non-master)
-        if: success() && !contains(steps.prepare.outputs.version, 'master')
-        run: |
-          docker buildx build \
-            --output type=image,name=${{ steps.prepare.outputs.docker_image }},push=true \
-            --platform ${{ steps.prepare.outputs.docker_platforms }} \
-            --tag "${{ steps.prepare.outputs.docker_image }}:${{ steps.prepare.outputs.version }}" \
-            --tag "${{ steps.prepare.outputs.docker_image }}:${{ steps.prepare.outputs.hash }}" \
             --file Dockerfile.arm32 .
