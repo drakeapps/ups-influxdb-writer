@@ -1,6 +1,15 @@
 FROM balenalib/raspberry-pi-alpine:3.9
 
-RUN apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing nut python3 py3-pip
+ARG NUT_VERSION=2.7.4-r6
+
+# RUN apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing nut python3 py3-pip
+RUN echo '@edge http://dl-cdn.alpinelinux.org/alpine/edge/main' \
+      >>/etc/apk/repositories && \
+    echo '@testing http://dl-cdn.alpinelinux.org/alpine/edge/testing' \
+      >>/etc/apk/repositories && \
+    apk add --update nut@testing=$NUT_VERSION \
+      libcrypto1.1@edge libssl1.1@edge net-snmp-libs@edge \
+	  python3 py3-pip
 # RUN apt-get update && apt-get install -y nut usbutils
 
 
