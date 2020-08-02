@@ -1,5 +1,7 @@
 #! /bin/sh -e
 
+lsusb
+
 mkdir -m 2750 /dev/shm/nut
 chown $USER.$GROUP /dev/shm/nut
 [ -e /var/run/nut ] || ln -s /dev/shm/nut /var/run
