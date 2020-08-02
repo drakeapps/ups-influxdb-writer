@@ -33,7 +33,7 @@ ENV UPS_NAME amazonbasics
 
 
 CMD /usr/src/app/scripts/start.sh \
-	--influx_host $INFLUX_HOST \
-	--influx_port $INFLUX_PORT \
-	--influx_db $INFLUX_DB \
-	--ups_name $UPS_NAME
+	$INFLUX_HOST \
+	$INFLUX_PORT \
+	$INFLUX_DB \
+	$UPS_NAME
