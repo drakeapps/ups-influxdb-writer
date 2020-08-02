@@ -38,6 +38,8 @@ jobs:
           echo ::set-output name=docker_image::docker.pkg.github.com/drakeapps/ups-influxdb-writer/ups-influxdb-writer-arm32
           echo ::set-output name=version::${GITHUB_REF#refs/*/}
           echo ::set-output name=hash::${GITHUB_SHA}
+      - name: Set up buildx
+        uses: crazy-max/ghaction-docker-buildx@v3
       - name: Docker Login
         if: success()
         env:
