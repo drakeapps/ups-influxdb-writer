@@ -11,7 +11,10 @@ echo 0 > /var/run/nut/upsmon.pid
 
 upsdrvctl -u root start
 upsd -u root
-exec upsmon -D
+exec upsmon -D &
+
+# wait a bit to get everything running
+sleep 10
 
 /usr/src/app/scripts/ups-monitor.py \
 	--influx_host $1 \
