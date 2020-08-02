@@ -20,20 +20,27 @@ influx_host = args.influx_host
 influx_port = args.influx_port
 influx_db = args.influx_db
 
+print('starting ups writer')
+print(args)
 
 os.system('mkdir -m 2750 /dev/shm/nut')
-os.system('chown $USER.$GROUP /dev/shm/nut')
+# os.system('chown $USER.$GROUP /dev/shm/nut')
 #[ -e /var/run/nut ] || ln -s /dev/shm/nut /var/run
 # Issue #15 - change pid warning message from "No such file" to "Ignoring"
-os.system('echo 0 > /var/run/nut/upsd.pid && chown $USER.$GROUP /var/run/nut/upsd.pid')
-os.system('echo 0 > /var/run/upsmon.pid')
+#os.system('echo 0 > /var/run/nut/upsd.pid && chown $USER.$GROUP /var/run/nut/upsd.pid')
+# os.system('echo 0 > /var/run/nut/upsd.pid')
+# os.system('echo 0 > /var/run/upsmon.pid')
 
-os.system('upsdrvctl -u root start')
-os.system('upsd -u $USER')
-os.system('upsmon -D &')
+# os.system('chmod -R 777 /var/run')
+
+# os.system('upsdrvctl -u root start')
+# os.system('upsd')
+# os.system('upsmon -D &')
+
+# time.sleep(10)
 
 while 1:
-    client = PyNUTClient()
+    client = PyNUTClient(host='ups')
 
     fields = {}
     for var in client.list_vars(ups_name):
@@ -50,6 +57,8 @@ while 1:
             'fields': fields
         }
     ]
+
+    print(measurement)
 
 
     influx_client = InfluxDBClient(influx_host, influx_port, database=influx_db)
