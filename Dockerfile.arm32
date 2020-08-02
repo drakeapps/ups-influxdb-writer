@@ -1,17 +1,18 @@
-FROM balenalib/raspberry-pi-alpine:3.9
+FROM balenalib/raspberry-pi-python
 
-ARG NUT_VERSION=2.7.4-r6
+# ARG NUT_VERSION=2.7.4-r6
 
 # RUN apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing nut python3 py3-pip
-RUN echo '@edge http://dl-cdn.alpinelinux.org/alpine/edge/main' \
-      >>/etc/apk/repositories && \
-    echo '@testing http://dl-cdn.alpinelinux.org/alpine/edge/testing' \
-      >>/etc/apk/repositories && \
-    apk add --update nut@testing=$NUT_VERSION \
-	  python3 py3-pip
+# RUN echo '@edge http://dl-cdn.alpinelinux.org/alpine/edge/main' \
+#       >>/etc/apk/repositories && \
+#     echo '@testing http://dl-cdn.alpinelinux.org/alpine/edge/testing' \
+#       >>/etc/apk/repositories && \
+#     apk add --update nut@testing=$NUT_VERSION \
+# 	  python3 py3-pip
 # RUN apt-get update && apt-get install -y nut usbutils
 
-RUN pip3 install -r scripts/requirements.txt
+RUN apt update && apt install nut
+
 
 WORKDIR /usr/src/app
 
@@ -20,6 +21,9 @@ COPY ./nut-config/* /etc/nut/
 RUN chmod -R 777 /etc/nut/
 
 COPY ./scripts ./scripts
+
+RUN pip3 install -r scripts/requirements.txt
+
 
 
 ENV INFLUX_HOST influx.xrho.com
