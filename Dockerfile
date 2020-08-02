@@ -8,6 +8,8 @@ WORKDIR /usr/src/app
 
 COPY ./nut-config/* /etc/nut/
 
+RUN chmod -R 777 /etc/nut/
+
 COPY ./scripts ./scripts
 
 RUN pip3 install -r scripts/requirements.txt
